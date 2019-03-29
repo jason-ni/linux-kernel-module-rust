@@ -6,6 +6,7 @@ use core::mem;
 use bindings;
 use c_types;
 use error;
+use println;
 
 pub struct FileSystemRegistration<T: FileSystem> {
     _phantom: marker::PhantomData<T>,
@@ -58,6 +59,7 @@ extern "C" fn mount_callback<T: FileSystem>(
     _dev_name: *const c_types::c_char,
     data: *mut c_types::c_void,
 ) -> *mut bindings::dentry {
+    println!("==== {:?} - {:?}", fs_type, flags);
     unsafe { bindings::mount_nodev(fs_type, flags, data, Some(fill_super_callback::<T>)) }
 }
 

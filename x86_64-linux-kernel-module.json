@@ -22,6 +22,7 @@
       "-m64"
     ]
   },
+  "needs-plt": true,
   "relocation-model": "static",
   "relro-level": "full",
   "target-c-int-width": "32",

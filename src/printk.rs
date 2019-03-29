@@ -44,18 +44,22 @@ impl fmt::Write for LogLineWriter {
     }
 }
 
-#[macro_export]
-macro_rules! println {
-    () => ({
-        $crate::printk::printk("\n".as_bytes());
-    });
-    ($fmt:expr) => ({
-        $crate::printk::printk(concat!($fmt, "\n").as_bytes());
-    });
-    ($fmt:expr, $($arg:tt)*) => ({
-        use ::core::fmt;
-        let mut writer = $crate::printk::LogLineWriter::new();
-        let _ = fmt::write(&mut writer, format_args!(concat!($fmt, "\n"), $($arg)*)).unwrap();
-        $crate::printk::printk(writer.as_bytes());
-    });
+#[macro_use]
+mod printk {
+
+    #[macro_export]
+    macro_rules! println {
+        () => ({
+            $crate::printk::printk("\n".as_bytes());
+        });
+        ($fmt:expr) => ({
+            $crate::printk::printk(concat!($fmt, "\n").as_bytes());
+        });
+        ($fmt:expr, $($arg:tt)*) => ({
+            use ::core::fmt;
+            let mut writer = $crate::printk::LogLineWriter::new();
+            let _ = fmt::write(&mut writer, format_args!(concat!($fmt, "\n"), $($arg)*)).unwrap();
+            $crate::printk::printk(writer.as_bytes());
+        });
+    }
 }

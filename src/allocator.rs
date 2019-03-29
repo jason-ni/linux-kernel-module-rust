@@ -1,4 +1,4 @@
-use core::alloc::{AllocErr, GlobalAlloc, Layout};
+use core::alloc::{GlobalAlloc, Layout};
 
 use bindings;
 use c_types;
@@ -22,6 +22,6 @@ unsafe impl GlobalAlloc for KernelAllocator {
 }
 
 #[lang = "oom"]
-extern "C" fn oom(_err: AllocErr) -> ! {
-    panic!("Out of memory!");
+extern "C" fn oom(layout: Layout) -> ! {
+    panic!("Out of memory! {}", layout.size());
 }

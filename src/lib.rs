@@ -1,5 +1,5 @@
 #![no_std]
-#![feature(alloc, allocator_api, const_fn, lang_items, panic_implementation)]
+#![feature(alloc, allocator_api, const_fn, lang_items)]
 
 #[macro_use]
 extern crate alloc;
@@ -66,7 +66,7 @@ macro_rules! kernel_module {
     };
 }
 
-pub trait KernelModule: Sized + Sync {
+pub trait KernelModule: Sized  {
     fn init() -> KernelResult<Self>;
 }
 
@@ -74,7 +74,7 @@ extern "C" {
     fn bug_helper() -> !;
 }
 
-#[panic_implementation]
+#[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     unsafe {
         bug_helper();
